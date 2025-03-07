@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
-
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,7 @@
     <link rel="manifest" href="website.manifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@100..900&&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Asap&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -24,36 +23,30 @@
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
-            font-variation-settings:
-                "wdth" 100;
+            font-variation-settings: "wdth" 100;
         }
-
         .progress-circle {
             position: relative;
             width: 80vw;
             height: 80vw;
         }
-
         .progress-circle svg {
             width: 100%;
             height: 100%;
         }
-
         #progress {
             stroke-dasharray: 1165;
             stroke-dashoffset: 1165;
             transition: stroke-dashoffset 0.1s linear;
         }
-
         .text {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-51%, -47%);
+            transform: translate(-50%, -49%);
             font-size: 35vw;
             color: #999;
         }
-
         .start-button {
             position: absolute;
             background-color: transparent;
@@ -63,26 +56,22 @@
         }
     </style>
 </head>
-
 <body>
     <div class="progress-circle" id="progress-circle">
-
         <svg viewBox="0 0 400 400">
             <circle fill="none" stroke="#444" stroke-width="13" cx="200" cy="200" r="185.5" />
             <circle fill="none" stroke="#999" stroke-width="13" cx="200" cy="200" r="185.5" stroke-linecap="round"
                 transform="rotate(-90 200 200)" id="progress" />
         </svg>
-
         <div class="text" id="progress-text">60</div>
     </div>
     <button class="start-button" id="start-button"></button>
-
     <script>
-        const progressText = document.getElementById('progress-text');
         const startButton = document.getElementById('start-button');
+        const progressText = document.getElementById('progress-text');
         const progressPath = document.getElementById('progress');
         const beep = new Audio('beep.wav');
-        const beepTimes = [45, 30, 15, 3, 2, 1];
+        const beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timeLeft = 600;
         let countdown;
         let running = false;
@@ -107,8 +96,6 @@
                 running = false;
             }
         });
-
     </script>
 </body>
-
 </html>
