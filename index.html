@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fortschrittsanzeiger</title>
-
+    <meta name="viewport" content="height=device-height, initial-scale=1.0">
+    <title>tima</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="website.manifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
     <style>
-
         body {
             margin: 0;
             display: flex;
@@ -20,10 +19,10 @@
             height: 100vh;
             height: 100svh;
             background-color: #000;
-            font-family: "Nunito", sans-serif;
+            font-family: "Dosis", sans-serif;
             font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+            font-weight: 400;
+            font-style: normal;
         }
 
         .progress-circle {
@@ -40,7 +39,7 @@
         #progress {
             stroke-dasharray: 1165;
             stroke-dashoffset: 1165;
-            transition: stroke-dashoffset 1s linear;
+            transition: stroke-dashoffset 0.1s linear;
         }
 
         .text {
@@ -54,16 +53,9 @@
 
         .start-button {
             position: absolute;
-            bottom: 8%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px 40px;
-            font-size: 40px;
-            cursor: pointer;
-            color: #aaa;
-            background-color: #000;
-            border: 2px solid #aaa;
-            border-radius: 10px;
+            background-color: transparent;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -72,14 +64,14 @@
     <div class="progress-circle" id="progress-circle">
 
         <svg viewBox="0 0 400 400">
-            <circle fill="none" stroke="#444" stroke-width="13" stroke-miterlimit="10" cx="200" cy="200" r="185.5" />
-            <path id="progress" fill="none" stroke="#999" stroke-width="13" stroke-linecap="round"
-                stroke-miterlimit="10" d="M200,14.5 a185.5,185.5 0 1,1 0,371 a185.5,185.5 0 1,1 0,-371" />
+            <circle fill="none" stroke="#444" stroke-width="13" cx="200" cy="200" r="185.5" />
+            <circle fill="none" stroke="#999" stroke-width="13" cx="200" cy="200" r="185.5"
+            stroke-linecap="round" transform="rotate(-90 200 200)" id="progress"  />
         </svg>
 
         <div class="text" id="progress-text">60</div>
     </div>
-    <button class="start-button" id="start-button">Start</button>
+    <button class="start-button" id="start-button"></button>
 
     <script>
         const progressText = document.getElementById('progress-text');
@@ -87,31 +79,28 @@
         const progressPath = document.getElementById('progress');
         const beep = new Audio('beep.wav');
         const beepTimes = [45, 30, 15, 3, 2, 1];
-        let timeLeft = 60;
+        let timeLeft = 600;
         let countdown;
         let running = false;
 
         startButton.addEventListener('click', () => {
             if (!running) {
-                startButton.innerText = 'Stop';
                 running = true;
                 countdown = setInterval(() => {
                     timeLeft--;
-                    progressText.innerText = timeLeft;
-                    progressPath.style.strokeDashoffset = (timeLeft / 60) * 1165;
-                    if (beepTimes.includes(timeLeft)) {
+                    timeLeft_in_seconds = Math.floor(timeLeft / 10);
+                    progressText.innerText = timeLeft_in_seconds;
+                    progressPath.style.strokeDashoffset = (timeLeft / 600) * 1165;
+                    if (timeLeft % 10 == 0 && beepTimes.includes(timeLeft_in_seconds - 1)) {
                         beep.play();
                     }
-
                     if (timeLeft <= 0) {
-                        timeLeft = 60;
+                        timeLeft = 600;
                     }
-                }, 1000);
+                }, 100);
             } else {
                 clearInterval(countdown);
                 running = false;
-                startButton.innerText = 'Start';
-
             }
         });
 
