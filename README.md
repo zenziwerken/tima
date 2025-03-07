@@ -7,4 +7,4 @@ Simple html/javascript page to show a countdown timer for one minute. It beeps a
 Try it life [here](https://zenziwerken.github.io/tima/) or 
 copy the html to your PC an use it offline.  
 
-Blipsound from [pixabay ](https://pixabay.com/de/sound-effects/blip-131856/)) (User u_f1ee7vf7na).
+Blipsound from [pixabay](https://pixabay.com/de/sound-effects/blip-131856/) (User u_f1ee7vf7na).
