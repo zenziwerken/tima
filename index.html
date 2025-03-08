@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +7,14 @@
     <title>tima</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="manifest" href="website.manifest">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-display: swap;
+            font-family: "Nunito-Digits";
+            font-style: normal;
+            font-weight: 400;
+            src: url("data:font/woff2;base64,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") format("woff2");
+        }
         *:focus, *:focus-visible  {outline:none !important}
         body {
             margin: 0;
@@ -22,7 +25,7 @@
             height: 100vh;
             height: 100svh;
             background-color: #000;
-            font-family: "Nunito", sans-serif;
+            font-family: "Nunito-Digits", sans-serif;
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
@@ -34,7 +37,6 @@
             height: 80vw;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
-            
         }
         .progress-circle svg {
             width: 100%;
@@ -72,7 +74,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="progress-circle" id="progress-circle">
         <svg viewBox="0 0 400 400">
@@ -88,7 +89,7 @@
         const progressText = document.getElementById('progress-text');
         const progressPath = document.getElementById('progress');
         const elapsedTimeDisplay = document.getElementById('elapsed-time');
-        const beep = new Audio('beep.wav');
+        const beep = new Audio('blip-131856.mp3');
         const beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timeLeft = 600;
         let elapsedTime = 0;
