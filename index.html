@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,12 @@
             font-weight: 400;
             src: url("Nunito-Regular-Subset.woff2") format("woff2");
         }
-        *:focus, *:focus-visible  {outline:none !important}
+
+        *:focus,
+        *:focus-visible {
+            outline: none !important
+        }
+
         body {
             margin: 0;
             display: flex;
@@ -31,6 +37,52 @@
             font-style: normal;
             font-variation-settings: "wdth" 100;
         }
+
+        .settings-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 6vh;
+            color: #999;
+            cursor: pointer;
+            padding: 0 4vw;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .settings-dialog {
+            display: none;
+            position: absolute;
+            height: 50vh;
+            width: 50vh;
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            font-size: 2rem;
+            border-radius: 2vw;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        input#beep-times {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            color: #fff;
+            background-color: #000;
+            border: 1px solid #fff;
+            border-radius: 1vh;
+            width: 90%;
+            font-size: 3vh;
+            letter-spacing: 0.1vh;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 0;
+            right: 2vh;
+            font-size: 4vh;
+            color: #999;
+            cursor: pointer;
+        }
+
         .progress-circle {
             position: relative;
             width: 80vw;
@@ -38,15 +90,18 @@
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
+
         .progress-circle svg {
             width: 100%;
             height: 100%;
         }
+
         #progress {
             stroke-dasharray: 1165;
             stroke-dashoffset: 1165;
             transition: stroke-dashoffset 0.1s linear;
         }
+
         .text {
             position: absolute;
             top: 50%;
@@ -56,24 +111,29 @@
             color: #999;
             cursor: pointer;
         }
+
         .elapsed-time {
             font-size: 14vw;
             color: #999;
             margin-top: 20px;
         }
+
         @media (orientation: landscape) {
             .progress-circle {
                 max-height: 70vh;
             }
+
             .text {
                 font-size: 30vh;
             }
+
             .elapsed-time {
                 font-size: 12vh;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="progress-circle" id="progress-circle">
         <svg viewBox="0 0 400 400">
@@ -84,13 +144,24 @@
         <div class="text" id="progress-text">60</div>
     </div>
     <div class="elapsed-time" id="elapsed-time">00:00</div>
+    <div class="settings-button" id="settings-button">…</div>
+    <div class="settings-dialog" id="settings-dialog">
+        <span class="close-button" id="close-button">&times;</span>
+        <p>Einstellungen</p>
+        <label for="beep-times">Beep Zeiten (Sekunden, durch Kommas getrennt):</label>
+        <input type="text" id="beep-times" value="45,30,15,3,2,1,0">
+    </div>
     <script>
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
         const progressPath = document.getElementById('progress');
         const elapsedTimeDisplay = document.getElementById('elapsed-time');
+        const settingsButton = document.getElementById('settings-button');
+        const settingsDialog = document.getElementById('settings-dialog');
+        const closeButton = document.getElementById('close-button');
+        const beepTimesInput = document.getElementById('beep-times');
         const beep = new Audio('blip-131856.mp3');
-        const beepTimes = [45, 30, 15, 3, 2, 1, 0];
+        let beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timeLeft = 600;
         let elapsedTime = 0;
         let countdown;
@@ -101,6 +172,50 @@
             const remainingSeconds = seconds % 60;
             return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
         }
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function loadBeepTimes() {
+            const cookieValue = getCookie("beepTimes");
+            if (cookieValue) {
+                beepTimes = cookieValue.split(',').map(Number);
+                beepTimesInput.value = cookieValue;
+            }
+        }
+
+        settingsButton.addEventListener('click', () => {
+            settingsDialog.style.display = settingsDialog.style.display === 'block' ? 'none' : 'block';
+        });
+
+        closeButton.addEventListener('click', () => {
+            settingsDialog.style.display = 'none';
+        });
+
+        beepTimesInput.addEventListener('change', () => {
+            beepTimes = beepTimesInput.value.split(',').map(Number);
+            setCookie("beepTimes", beepTimesInput.value, 365);
+        });
 
         progresscircle.addEventListener('click', () => {
             if (!running) {
@@ -125,6 +240,8 @@
                 running = false;
             }
         });
+
+        loadBeepTimes();
     </script>
 </body>
 
