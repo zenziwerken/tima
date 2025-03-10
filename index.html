@@ -8,136 +8,7 @@
     <title>tima</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="manifest" href="website.manifest">
-    <style>
-        @font-face {
-            font-display: swap;
-            font-family: "Nunito-Digits";
-            font-style: normal;
-            font-weight: 400;
-            src: url("Nunito-Regular-Subset.woff2") format("woff2");
-        }
-
-        *:focus,
-        *:focus-visible {
-            outline: none !important
-        }
-
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            height: 100svh;
-            background-color: #000;
-            font-family: "Nunito-Digits", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 400;
-            font-style: normal;
-            font-variation-settings: "wdth" 100;
-        }
-
-        .settings-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 6vh;
-            color: #999;
-            cursor: pointer;
-            padding: 0 4vw;
-            line-height: 4vh;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .settings-dialog {
-            display: none;
-            position: absolute;
-            height: 50vh;
-            width: 50vh;
-            max-width: 80vw;
-            background-color: #000;
-            color: #fff;
-            padding: 20px;
-            font-size: 2rem;
-            border-radius: 2vw;
-            border: 2px solid #666;
-        }
-        .settings-dialog p {
-            border-bottom: 2px solid #666;
-            margin: 0 0 1vh;
-        }
-        input#beep-times {
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            color: #fff;
-            background-color: #000;
-            border: 1px solid #fff;
-            border-radius: 1vh;
-            font-size: 3vh;
-            max-width: 76vw;
-            width: 48vh;
-            letter-spacing: 0.1vh;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 0.5vh;
-            right: 2vh;
-            font-size: 4vh;
-            color: #999;
-            cursor: pointer;
-        }
-
-        .progress-circle {
-            position: relative;
-            width: 80vw;
-            height: 80vw;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .progress-circle svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        #progress {
-            stroke-dasharray: 1165;
-            stroke-dashoffset: 1165;
-            transition: stroke-dashoffset 0.1s linear;
-        }
-
-        .text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-51%, -48%);
-            font-size: 35vw;
-            color: #999;
-            cursor: pointer;
-        }
-
-        .elapsed-time {
-            font-size: 14vw;
-            color: #999;
-            margin-top: 20px;
-        }
-
-        @media (orientation: landscape) {
-            .progress-circle {
-                max-height: 70vh;
-            }
-
-            .text {
-                font-size: 30vh;
-            }
-
-            .elapsed-time {
-                font-size: 12vh;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -149,6 +20,7 @@
         </svg>
         <div class="text" id="progress-text">60</div>
     </div>
+
     <div class="elapsed-time" id="elapsed-time">00:00</div>
     <div class="settings-button" id="settings-button">…</div>
     <div class="settings-dialog" id="settings-dialog">
@@ -156,7 +28,10 @@
         <p>Einstellungen</p>
         <label for="beep-times">Beep Zeiten (Sekunden, durch Kommas getrennt):</label>
         <input type="text" id="beep-times" value="45,30,15,3,2,1,0">
+        <label for="timer-duration">Dauer des Countdown-Timers (Sekunden):</label>
+        <input type="number" id="timer-duration" value="60">
     </div>
+    
     <script>
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
@@ -166,9 +41,11 @@
         const settingsDialog = document.getElementById('settings-dialog');
         const closeButton = document.getElementById('close-button');
         const beepTimesInput = document.getElementById('beep-times');
+        const timerDurationInput = document.getElementById('timer-duration');
         const beep = new Audio('blip-131856.mp3');
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
-        let timeLeft = 600;
+        let timerDuration = 60;
+        let timeLeft = timerDuration * 10;
         let elapsedTime = 0;
         let countdown;
         let running = false;
@@ -196,11 +73,17 @@
             return "";
         }
 
-        function loadBeepTimes() {
-            const cookieValue = getCookie("beepTimes");
-            if (cookieValue) {
-                beepTimes = cookieValue.split(',').map(Number);
-                beepTimesInput.value = cookieValue;
+        function loadSettings() {
+            const beepTimesCookie = getCookie("beepTimes");
+            if (beepTimesCookie) {
+                beepTimes = beepTimesCookie.split(',').map(Number);
+                beepTimesInput.value = beepTimesCookie;
+            }
+            const timerDurationCookie = getCookie("timerDuration");
+            if (timerDurationCookie) {
+                timerDuration = Number(timerDurationCookie);
+                timerDurationInput.value = timerDuration;
+                timeLeft = timerDuration * 10;
             }
         }
 
@@ -223,6 +106,13 @@
             setCookie("beepTimes", beepTimesInput.value, 365);
         });
 
+        timerDurationInput.addEventListener('change', () => {
+            timerDuration = Number(timerDurationInput.value);
+            setCookie("timerDuration", timerDuration, 365);
+            timeLeft = timerDuration * 10;
+            progressText.innerText = timerDuration;
+        });
+
         progresscircle.addEventListener('click', () => {
             if (!running) {
                 running = true;
@@ -230,15 +120,15 @@
                     timeLeft--;
                     elapsedTime++;
                     timeLeft_in_seconds = Math.floor(timeLeft / 10);
-                    progressPath.style.strokeDashoffset = (timeLeft / 600) * 1165;
+                    progressPath.style.strokeDashoffset = (timeLeft / (timerDuration * 10)) * 1165;
                     if (timeLeft % 10 == 0 && beepTimes.includes(timeLeft_in_seconds - 1)) {
                         beep.play();
                     }
                     if (timeLeft <= 0) {
-                        timeLeft = 600;
+                        timeLeft = timerDuration * 10;
                     }
-                    progressText.innerText = timeLeft <= 10 ? 60 : timeLeft_in_seconds;
-                    progressPath.style.transition = timeLeft > 598 ? 'none' : 'stroke-dashoffset 0.1s linear';
+                    progressText.innerText = timeLeft <= 10 ? timerDuration : timeLeft_in_seconds;
+                    progressPath.style.transition = timeLeft > (timerDuration * 10 - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
                     elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / 10) + 1);
                 }, 100);
             } else {
@@ -247,7 +137,7 @@
             }
         });
 
-        loadBeepTimes();
+        loadSettings();
     </script>
 </body>
 
