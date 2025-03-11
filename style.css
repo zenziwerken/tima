@@ -52,7 +52,6 @@ body {
 .settings-dialog {
     display: none;
     position: absolute;
-    height: 50vh;
     width: 50vh;
     max-width: 80vw;
     background-color: #000;
@@ -135,4 +134,20 @@ input#beep-times, input#timer-duration {
     .elapsed-time {
         font-size: 12vh;
     }
+    .settings-dialog {
+        max-width: 80vw;
+    }
+    input#beep-times, input#timer-duration {
+        font-size: 4vw;
+    }
+    .close-button {
+        top: 0.5vw;
+        right: 2vw;
+        font-size: 4vw;
+    }
+    .settings-button {
+        top: 2vw;
+    font-size: 6vw;
+    }
+
 }
