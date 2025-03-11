@@ -135,7 +135,7 @@ input#beep-times, input#timer-duration {
         font-size: 12vh;
     }
     .settings-dialog {
-        max-width: 80vw;
+        width: 80vw;
     }
     input#beep-times, input#timer-duration {
         font-size: 4vw;
