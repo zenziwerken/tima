@@ -1,1 +1,1 @@
-{"name":"tima","short_name":"","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}],"theme_color":"#fff","background_color":"#000","display":"standalone"}
+{"name":"a simple countdown timer for your practice","short_name":"tima","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}],"theme_color":"#fff","background_color":"#000","display":"standalone","orientation":"portrait-primary"}
