@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="height=device-height, initial-scale=1.0">
     <title>tima</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -122,15 +121,17 @@
                     elapsedTime++;
                     timeLeft_in_seconds = Math.floor(timeLeft / 10);
                     progressPath.style.strokeDashoffset = (timeLeft / (timerDuration * 10)) * 1165;
-                    if (timeLeft % 10 == 0 && beepTimes.includes(timeLeft_in_seconds - 1)) {
-                        beep.play();
+                    progressPath.style.transition = timeLeft > (timerDuration * 10 - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
+                    if (timeLeft % 10 == 0) {
+                        progressText.innerText = timeLeft == 0 ? timerDuration : timeLeft_in_seconds;
+                        elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / 10));
+                        if (beepTimes.includes(timeLeft_in_seconds)) {
+                            beep.play();
+                        }
                     }
                     if (timeLeft <= 0) {
                         timeLeft = timerDuration * 10;
                     }
-                    progressText.innerText = timeLeft <= 10 ? timerDuration : timeLeft_in_seconds;
-                    progressPath.style.transition = timeLeft > (timerDuration * 10 - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
-                    elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / 10) + 1);
                 }, 100);
             } else {
                 clearInterval(countdown);
