@@ -57,7 +57,7 @@ body {
     background-color: #000;
     color: #fff;
     padding: 20px;
-    font-size: 2rem;
+    font-size: 3vh;
     border-radius: 2vw;
     border: 2px solid #666;
 }
@@ -70,7 +70,7 @@ input#beep-times, input#timer-duration {
     margin: 0.5rem 0;
     color: #fff;
     background-color: #000;
-    border: 1px solid #fff;
+    border: 2px solid #999;
     border-radius: 1vh;
     font-size: 3vh;
     max-width: 76vw;
@@ -80,7 +80,7 @@ input#beep-times, input#timer-duration {
 
 .close-button {
     position: absolute;
-    top: 0.5vh;
+    top: 0;
     right: 2vh;
     font-size: 4vh;
     color: #999;
@@ -137,8 +137,9 @@ input#beep-times, input#timer-duration {
     .settings-dialog {
         width: 80vw;
     }
-    input#beep-times, input#timer-duration {
-        font-size: 4vw;
+    input#beep-times, input#timer-duration, .settings-dialog {
+        font-size: 2.5vw;
+        width: 100%;
     }
     .close-button {
         top: 0.5vw;
@@ -148,6 +149,9 @@ input#beep-times, input#timer-duration {
     .settings-button {
         top: 2vw;
     font-size: 6vw;
+    }
+    input#beep-times, input#timer-duration {
+        display: block;
     }
 
 }
