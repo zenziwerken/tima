@@ -9,3 +9,6 @@ Additionally, 'tima' offers customization options, allowing users to modify the 
 Blipsound from [pixabay](https://pixabay.com/de/sound-effects/blip-131856/) (User u_f1ee7vf7na).
 
 <img src="assets/screenshot.webp" height="600">
+
+> [!NOTE]
+> In a way, the standalone version is a test of how to pack all elements into an html file, including fonts, css, javascript and even binary files like the sound used. On a desktop browser, this can be used like a real offline application. Unfortunately, Android has the limitation that local files cannot be opened in the browser without further ado. However, some file explorers (such as the Cx File Explorer) can start a small local web server and work around the problem.
