@@ -35,17 +35,18 @@ body {
     font-weight: 400;
     font-style: normal;
     font-variation-settings: "wdth" 100;
+    text-size-adjust: none;
 }
 
 .settings-button {
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 6vh;
+    font-size: 4rem;
     color: #999;
     cursor: pointer;
-    padding: 0 4vw;
-    line-height: 4vh;
+    padding: 0 2rem;
+    line-height: 4rem;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -57,13 +58,17 @@ body {
     background-color: #000;
     color: #fff;
     padding: 20px;
-    font-size: 3vh;
-    border-radius: 2vw;
+    font-size: 2rem;
+    border-radius: 1rem;
     border: 2px solid #666;
+    text-size-adjust: none;
+    -webkit-text-size-adjust: none; /* Für Safari und andere WebKit-basierte Browser */
+    -moz-text-size-adjust: none; /* Für Firefox */
+    -ms-text-size-adjust: none; /* Für Internet Explorer */
 }
 .settings-dialog p {
     border-bottom: 2px solid #666;
-    margin: 0 0 1vh;
+    margin: 0 0 1rem;
 }
 input#beep-times, input#timer-duration {
     padding: 0.5rem;
@@ -71,8 +76,8 @@ input#beep-times, input#timer-duration {
     color: #fff;
     background-color: #000;
     border: 2px solid #999;
-    border-radius: 1vh;
-    font-size: 3vh;
+    border-radius: 1rem;
+    font-size: 2rem;
     max-width: 76vw;
     width: 48vh;
     letter-spacing: 0.1vh;
@@ -81,8 +86,8 @@ input#beep-times, input#timer-duration {
 .close-button {
     position: absolute;
     top: 0;
-    right: 2vh;
-    font-size: 4vh;
+    right: 2rem;
+    font-size: 3rem;
     color: #999;
     cursor: pointer;
 }
