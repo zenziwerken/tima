@@ -72,7 +72,9 @@ body.dark-mode {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s;
+    -webkit-tap-highlight-color: transparent;
 }
+
 .theme-toggle-label:focus,
 .theme-toggle-label:focus-visible {
     outline: none !important
@@ -95,7 +97,7 @@ body.dark-mode {
     transition: opacity 0.3s, transform 0.3s;
 }
 
-.theme-toggle-icon .sun  {
+.theme-toggle-icon .sun {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.3s, transform 0.3s;
@@ -234,19 +236,22 @@ input#timer-duration {
     .innercircle {
         stroke: #999;
     }
+
     .theme-toggle-label {
         background-color: #f0f0f0;
     }
+
     .theme-toggle-label:hover {
         background-color: #ddd;
     }
+
     .theme-toggle-icon .sun {
         opacity: 1;
         transform: translateY(0);
         transition: opacity 0.3s, transform 0.3s;
     }
-    
-    .theme-toggle-icon .moon  {
+
+    .theme-toggle-icon .moon {
         opacity: 0;
         transform: translateY(20px);
         transition: opacity 0.3s, transform 0.3s;
