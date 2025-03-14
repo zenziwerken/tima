@@ -67,15 +67,19 @@ body.dark-mode {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: #333;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s;
 }
+.theme-toggle-label:focus,
+.theme-toggle-label:focus-visible {
+    outline: none !important
+}
 
 .theme-toggle-label:hover {
-    background-color: #e0e0e0;
+    background-color: #444;
 }
 
 .theme-toggle-icon {
@@ -85,30 +89,16 @@ body.dark-mode {
     transition: fill 0.3s;
 }
 
-.theme-toggle-icon .sun {
+.theme-toggle-icon .moon {
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.3s, transform 0.3s;
 }
 
-.theme-toggle-icon .moon {
+.theme-toggle-icon .sun  {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.3s, transform 0.3s;
-}
-
-#theme-toggle-checkbox:checked+.theme-toggle-label {
-    background-color: #333;
-}
-
-#theme-toggle-checkbox:checked+.theme-toggle-label .theme-toggle-icon .sun {
-    opacity: 0;
-    transform: translateY(-20px);
-}
-
-#theme-toggle-checkbox:checked+.theme-toggle-label .theme-toggle-icon .moon {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .settings-button {
@@ -243,6 +233,23 @@ input#timer-duration {
 
     .innercircle {
         stroke: #999;
+    }
+    .theme-toggle-label {
+        background-color: #f0f0f0;
+    }
+    .theme-toggle-label:hover {
+        background-color: #ddd;
+    }
+    .theme-toggle-icon .sun {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .theme-toggle-icon .moon  {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.3s;
     }
 }
 

@@ -171,18 +171,18 @@
             const savedTheme = getCookie('theme');
             if (savedTheme) {
                 body.classList.add(savedTheme);
-                toggleCheckbox.checked = savedTheme === 'dark-mode';
+                toggleCheckbox.checked = savedTheme === 'light-mode';
             }
 
             toggleCheckbox.addEventListener('change', function () {
                 if (this.checked) {
-                    body.classList.remove('light-mode');
-                    body.classList.add('dark-mode');
-                    setCookie('theme', 'dark-mode', 365);
-                } else {
                     body.classList.remove('dark-mode');
                     body.classList.add('light-mode');
                     setCookie('theme', 'light-mode', 365);
+                } else {
+                    body.classList.remove('light-mode');
+                    body.classList.add('dark-mode');
+                    setCookie('theme', 'dark-mode', 365);
                 }
             });
         });
