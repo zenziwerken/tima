@@ -11,10 +11,29 @@
 </head>
 
 <body>
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-toggle-checkbox">
+        <label for="theme-toggle-checkbox" class="theme-toggle-label">
+            <svg class="theme-toggle-icon" viewBox="0 0 24 24" width="24" height="24" stroke-linecap="round">
+                <path class="moon" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z" />
+                <g class="sun" stroke="#999" stroke-width="2">
+                    <circle cx="12" cy="12" r="5" fill="none" />
+                    <line x1="12" y1="2" x2="12" y2="4" />
+                    <line x1="12" y1="20" x2="12" y2="22" />
+                    <line x1="2" y1="12" x2="4" y2="12" />
+                    <line x1="20" y1="12" x2="22" y2="12" />
+                    <line x1="5.64" y1="5.64" x2="4.22" y2="4.22" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="5.64" y1="18.36" x2="4.22" y2="19.78" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </g>
+            </svg>
+        </label>
+    </div>
     <div class="progress-circle" id="progress-circle">
         <svg viewBox="0 0 400 400">
-            <circle fill="none" stroke="#444" stroke-width="13" cx="200" cy="200" r="185.5" />
-            <circle fill="none" stroke="#999" stroke-width="13" cx="200" cy="200" r="185.5" stroke-linecap="round"
+            <circle fill="none" class="outercircle" stroke-width="13" cx="200" cy="200" r="185.5" />
+            <circle fill="none" class="innercircle" stroke-width="13" cx="200" cy="200" r="185.5" stroke-linecap="round"
                 transform="rotate(-90 200 200)" id="progress" />
         </svg>
         <div class="text" id="progress-text">60</div>
@@ -30,7 +49,7 @@
         <label for="timer-duration">Dauer des Countdown-Timers (Sekunden):</label>
         <input type="number" id="timer-duration" value="60">
     </div>
-    
+
     <script>
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
@@ -49,7 +68,7 @@
         let countdown;
         let running = false;
 
-        function setCookie(name, value, days) {			
+        function setCookie(name, value, days) {
             if (window.localStorage) {
                 window.localStorage.setItem(name, value);
             } else {
@@ -60,12 +79,10 @@
             }
         }
 
-        function getCookie(name) {			
+        function getCookie(name) {
             if (window.localStorage) {
-				const value = window.localStorage.getItem(name);
-				console.log('Item erfolgreich abgerufen:', name, value);
-				return value;
-			} else {
+                return window.localStorage.getItem(name);
+            } else {
                 const cname = name + "=";
                 const decodedCookie = decodeURIComponent(document.cookie);
                 const ca = decodedCookie.split(';');
@@ -148,7 +165,27 @@
                 running = false;
             }
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
+            const body = document.body;
+            const savedTheme = getCookie('theme');
+            if (savedTheme) {
+                body.classList.add(savedTheme);
+                toggleCheckbox.checked = savedTheme === 'dark-mode';
+            }
 
+            toggleCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    body.classList.remove('light-mode');
+                    body.classList.add('dark-mode');
+                    setCookie('theme', 'dark-mode', 365);
+                } else {
+                    body.classList.remove('dark-mode');
+                    body.classList.add('light-mode');
+                    setCookie('theme', 'light-mode', 365);
+                }
+            });
+        });
         loadSettings();
     </script>
 </body>

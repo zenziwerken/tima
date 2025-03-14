@@ -10,15 +10,16 @@
 *:focus-visible {
     outline: none !important
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type=number] {
     appearance: textfield;
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 body {
@@ -29,13 +30,85 @@ body {
     flex-direction: column;
     height: 100vh;
     height: 100svh;
-    background-color: #000;
     font-family: "Nunito-Digits", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     font-variation-settings: "wdth" 100;
     text-size-adjust: none;
+    transition: background-color 0.2s, color 0.3s;
+    background-color: #000;
+    color: #fff;
+}
+
+body.light-mode {
+    background-color: #fff;
+    color: #000;
+}
+
+body.dark-mode {
+    background-color: #000;
+    color: #fff;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+}
+
+#theme-toggle-checkbox {
+    display: none;
+}
+
+.theme-toggle-label {
+    cursor: pointer;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle-label:hover {
+    background-color: #e0e0e0;
+}
+
+.theme-toggle-icon {
+    width: 32px;
+    height: 32px;
+    fill: #666;
+    transition: fill 0.3s;
+}
+
+.theme-toggle-icon .sun {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.theme-toggle-icon .moon {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#theme-toggle-checkbox:checked+.theme-toggle-label {
+    background-color: #333;
+}
+
+#theme-toggle-checkbox:checked+.theme-toggle-label .theme-toggle-icon .sun {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+#theme-toggle-checkbox:checked+.theme-toggle-label .theme-toggle-icon .moon {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .settings-button {
@@ -50,6 +123,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+
 .settings-dialog {
     display: none;
     position: absolute;
@@ -62,15 +136,22 @@ body {
     border-radius: 1rem;
     border: 2px solid #666;
     text-size-adjust: none;
-    -webkit-text-size-adjust: none; /* Für Safari und andere WebKit-basierte Browser */
-    -moz-text-size-adjust: none; /* Für Firefox */
-    -ms-text-size-adjust: none; /* Für Internet Explorer */
+    -webkit-text-size-adjust: none;
+    /* Für Safari und andere WebKit-basierte Browser */
+    -moz-text-size-adjust: none;
+    /* Für Firefox */
+    -ms-text-size-adjust: none;
+    /* Für Internet Explorer */
 }
+
 .settings-dialog p {
     border-bottom: 2px solid #666;
     margin: 0 0 1rem;
 }
-input#beep-times, input#timer-duration {
+
+
+input#beep-times,
+input#timer-duration {
     padding: 0.5rem;
     margin: 0.5rem 0;
     color: #fff;
@@ -127,6 +208,44 @@ input#beep-times, input#timer-duration {
     margin-top: 20px;
 }
 
+.outercircle {
+    stroke: #444;
+}
+
+.innercircle {
+    stroke: #999;
+}
+
+.light-mode {
+
+    .elapsed-time,
+    .text,
+    .close-button,
+    .settings-dialog {
+        color: #999;
+    }
+
+    input#beep-times,
+    input#timer-duration,
+    .settings-dialog {
+        background-color: #fff;
+        border: 2px solid #ccc;
+        color: #999;
+    }
+
+    .settings-dialog p {
+        border-bottom: 2px solid #ccc;
+    }
+
+    .outercircle {
+        stroke: #ddd;
+    }
+
+    .innercircle {
+        stroke: #999;
+    }
+}
+
 @media (orientation: landscape) {
     .progress-circle {
         max-height: 70vh;
@@ -139,23 +258,26 @@ input#beep-times, input#timer-duration {
     .elapsed-time {
         font-size: 12vh;
     }
+
     .settings-dialog {
         width: 80vw;
     }
-    input#beep-times, input#timer-duration, .settings-dialog {
-        font-size: 2.5vw;
+
+    input#beep-times,
+    input#timer-duration,
+    .settings-dialog {
+        font-size: 2rem;
         width: 100%;
     }
+
     .close-button {
-        top: 0.5vw;
-        right: 2vw;
-        font-size: 4vw;
+        top: -0.5rem;
+        right: 1.5rem;
+        font-size: 3.5rem;
     }
-    .settings-button {
-        top: 2vw;
-    font-size: 6vw;
-    }
-    input#beep-times, input#timer-duration {
+
+    input#beep-times,
+    input#timer-duration {
         display: block;
     }
 
