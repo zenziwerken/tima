@@ -222,7 +222,7 @@ input#timer-duration {
     .settings-dialog {
         background-color: #fff;
         border: 2px solid #ccc;
-        color: #999;
+        color: #333;
     }
 
     .settings-dialog p {
