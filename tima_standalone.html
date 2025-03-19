@@ -140,9 +140,9 @@
             const beepTimesCookie = getCookie("beepTimes");
             if (beepTimesCookie) {
                 beepTimes = beepTimesCookie.split(',').map(Number);
-                beepGaps(beepTimes);
                 beepTimesInput.value = beepTimesCookie;
             }
+            beepGaps(beepTimes);
         }
 
         function beepGaps(beepTimes) {
