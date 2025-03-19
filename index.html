@@ -31,10 +31,9 @@
         </label>
     </div>
     <div class="progress-circle" id="progress-circle">
-        <svg viewBox="0 0 400 400">
-            <circle fill="none" class="outercircle" stroke-width="13" cx="200" cy="200" r="185.5" />
-            <circle fill="none" class="innercircle" stroke-width="13" cx="200" cy="200" r="185.5" stroke-linecap="round"
-                transform="rotate(-90 200 200)" id="progress" />
+        <svg viewBox="0 0 400 400" stroke-width="13" fill="none" stroke-linecap="round">
+            <circle class="outercircle" id="progress-outercircle"  cx="200" cy="200" r="185.5"  transform="rotate(3 200 200)"  />
+            <circle class="innercircle" id="progress-innercircle"  cx="200" cy="200" r="185.5"  transform="rotate(-91 200 200)"  />
         </svg>
         <div class="text" id="progress-text">60</div>
     </div>
@@ -63,7 +62,8 @@
     <script>
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
-        const progressPath = document.getElementById('progress');
+        const progressPath = document.getElementById('progress-innercircle');
+        const progressOuterPath = document.getElementById('progress-outercircle');
         const elapsedTimeDisplay = document.getElementById('elapsed-time');
         const settingsButton = document.getElementById('settings-button');
         const settingsDialog = document.getElementById('settings-dialog');
@@ -71,13 +71,17 @@
         const beepTimesInput = document.getElementById('beep-times');
         const timerDurationInput = document.getElementById('timer-duration');
         const resetTimer = document.getElementById('reset-timer');
+        const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
         const beep = new Audio('assets/blip-131856.mp3');
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timerDuration = 60;
-        let timeLeft = timerDuration * 10;
+        const timerDevider = 10;
+        let timeLeft = timerDuration * timerDevider;
         let elapsedTime = 0;
         let countdown;
         let running = false;
+        const totalLength = 1165;
+        const gap = 19;
 
         function setCookie(name, value, days) {
             if (window.localStorage) {
@@ -111,18 +115,36 @@
         }
 
         function loadSettings() {
-            const beepTimesCookie = getCookie("beepTimes");
-            if (beepTimesCookie) {
-                beepTimes = beepTimesCookie.split(',').map(Number);
-                beepTimesInput.value = beepTimesCookie;
-            }
             const timerDurationCookie = getCookie("timerDuration");
             if (timerDurationCookie) {
                 timerDuration = Number(timerDurationCookie);
                 timerDurationInput.value = timerDuration;
-                timeLeft = timerDuration * 10;
+                timeLeft = timerDuration * timerDevider;
                 progressText.innerText = timerDuration;
             }
+            const savedTheme = getCookie('theme');
+            if (savedTheme) {
+                document.body.classList.add(savedTheme);
+                toggleCheckbox.checked = savedTheme === 'light-mode';
+            }
+            const beepTimesCookie = getCookie("beepTimes");
+            if (beepTimesCookie) {
+                beepTimes = beepTimesCookie.split(',').map(Number);
+                beepGaps(beepTimes);
+                beepTimesInput.value = beepTimesCookie;
+            }
+        }
+
+        function beepGaps(beepTimes) {
+            beepTimes = [timerDuration, ...beepTimes];
+
+            const dashArray = beepTimes
+                .map((time, i, arr) => i < arr.length - 1 ? time - arr[i + 1] : null)
+                .filter(interval => interval > 0)
+                .map(interval => `${(interval / timerDuration) * totalLength - gap} ${gap}`)
+                .join(' ');
+
+            progressOuterPath.style.strokeDasharray = dashArray;
         }
 
         function formatTime(seconds) {
@@ -141,13 +163,14 @@
 
         beepTimesInput.addEventListener('change', () => {
             beepTimes = beepTimesInput.value.split(',').map(Number);
+            beepGaps(beepTimes);
             setCookie("beepTimes", beepTimesInput.value, 365);
         });
 
         timerDurationInput.addEventListener('change', () => {
             timerDuration = Number(timerDurationInput.value);
             setCookie("timerDuration", timerDuration, 365);
-            timeLeft = timerDuration * 10;
+            timeLeft = timerDuration * timerDevider;
             progressText.innerText = timerDuration;
         });
 
@@ -157,21 +180,21 @@
                 countdown = setInterval(() => {
                     timeLeft--;
                     elapsedTime++;
-                    timeLeft_in_seconds = Math.floor(timeLeft / 10);
-                    progressPath.style.strokeDashoffset = (timeLeft / (timerDuration * 10)) * 1165;
-                    progressPath.style.transition = timeLeft > (timerDuration * 10 - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
-                    if (timeLeft % 10 == 0) {
+                    timeLeft_in_seconds = Math.floor(timeLeft / timerDevider);
+                    progressPath.style.strokeDashoffset = (timeLeft / (timerDuration * timerDevider)) * totalLength;
+                    progressPath.style.transition = timeLeft > (timerDuration * timerDevider - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
+                    if (timeLeft % timerDevider == 0) {
                         progressText.innerText = timeLeft == 0 ? timerDuration : timeLeft_in_seconds;
-                        elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / 10));
+                        elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / timerDevider));
                         if (beepTimes.includes(timeLeft_in_seconds)) {
                             beep.play();
                         }
                     }
                     if (timeLeft <= 0) {
-                        timeLeft = timerDuration * 10;
+                        timeLeft = timerDuration * timerDevider;
                     }
                     resetTimer.style.display = elapsedTime > 0 ? 'flex' : 'none';
-                }, 100);
+                }, 1000 / timerDevider);
             } else {
                 clearInterval(countdown);
                 running = false;
@@ -179,7 +202,6 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
             const resetTimerButton = document.getElementById('reset-timer-button');
             
             const body = document.body;
@@ -204,10 +226,10 @@
             resetTimerButton.addEventListener('click', () => {
                 clearInterval(countdown);
                 running = false;
-                timeLeft = timerDuration * 10;
+                timeLeft = timerDuration * timerDevider;
                 elapsedTime = 0;
                 progressText.innerText = timerDuration;
-                progressPath.style.strokeDashoffset = 1165;
+                progressPath.style.strokeDashoffset = totalLength;
                 elapsedTimeDisplay.innerText = formatTime(0);
                 resetTimer.style.display = 'none';
             });
