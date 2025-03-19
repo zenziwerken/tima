@@ -36,7 +36,7 @@ body {
     font-style: normal;
     font-variation-settings: "wdth" 100;
     text-size-adjust: none;
-    transition: background-color 0.2s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
     background-color: #000;
     color: #fff;
 }
@@ -208,54 +208,51 @@ input#timer-duration {
     stroke: #999;
 }
 
-.light-mode {
+.light-mode .elapsed-time,
+.light-mode .text,
+.light-mode .close-button,
+.light-mode .settings-dialog {
+    color: #999;
+}
 
-    .elapsed-time,
-    .text,
-    .close-button,
-    .settings-dialog {
-        color: #999;
-    }
+.light-mode input#beep-times,
+.light-mode input#timer-duration,
+.light-mode .settings-dialog {
+    background-color: #fff;
+    border: 2px solid #ccc;
+    color: #333;
+}
 
-    input#beep-times,
-    input#timer-duration,
-    .settings-dialog {
-        background-color: #fff;
-        border: 2px solid #ccc;
-        color: #333;
-    }
+.light-mode .settings-dialog p {
+    border-bottom: 2px solid #ccc;
+}
 
-    .settings-dialog p {
-        border-bottom: 2px solid #ccc;
-    }
+.light-mode .outercircle {
+    stroke: #ddd;
+}
 
-    .outercircle {
-        stroke: #ddd;
-    }
+.light-mode .innercircle {
+    stroke: #999;
+}
 
-    .innercircle {
-        stroke: #999;
-    }
+.light-mode .theme-toggle-label {
+    background-color: #f0f0f0;
+}
 
-    .theme-toggle-label {
-        background-color: #f0f0f0;
-    }
+.light-mode .theme-toggle-label:hover {
+    background-color: #ddd;
+}
 
-    .theme-toggle-label:hover {
-        background-color: #ddd;
-    }
+.light-mode .theme-toggle-icon .sun {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
 
-    .theme-toggle-icon .sun {
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.3s, transform 0.3s;
-    }
-
-    .theme-toggle-icon .moon {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.3s;
-    }
+.light-mode .theme-toggle-icon .moon {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
 }
 
 @media (orientation: landscape) {
