@@ -103,6 +103,34 @@ body.dark-mode {
     transition: opacity 0.3s, transform 0.3s;
 }
 
+.reset-timer-icon {
+    stroke: #666;
+}
+.reset-timer {
+    position: absolute;
+    bottom: 2rem;
+    left: calc(50vw - 25px);
+    background-color: #333;
+    width: 50px;
+    height: 50px;
+    fill: #666;
+    transition: fill 0.3s;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.reset-timer-button {
+    width: 34px;
+    height: 34px;
+}
+.reset-timer:hover {
+    transform: rotate(-45deg);
+    transition: transform 0.4s;
+}
+
 .settings-button {
     position: absolute;
     top: 0;
@@ -235,12 +263,18 @@ input#timer-duration {
     stroke: #999;
 }
 
-.light-mode .theme-toggle-label {
+.light-mode .theme-toggle-label,
+.light-mode .reset-timer {
     background-color: #f0f0f0;
 }
 
-.light-mode .theme-toggle-label:hover {
+.light-mode .theme-toggle-label:hover,
+.light-mode .reset-time:hover {
     background-color: #ddd;
+}
+
+.light-mode .reset-timer-icon {
+    stroke: #999;
 }
 
 .light-mode .theme-toggle-icon .sun {

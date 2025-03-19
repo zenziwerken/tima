@@ -50,6 +50,16 @@
         <input type="number" id="timer-duration" value="60">
     </div>
 
+    <div class="reset-timer" id="reset-timer">
+        <div class="reset-timer-button" id="reset-timer-button">
+            <svg class="reset-timer-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" >
+                <polyline points="4.2,4.6 4.2,8.6 8.2,8.6 "/>
+                <path d="M11.6,7.8v4.9h4.5"/>
+                <path d="M5,8c1.4-2.4,4-4,6.9-4	c4.4,0,8,3.6,8,8s-3.6,8-8,8s-8-3.6-8-8"/>
+            </svg>                
+        </div>
+    </div>
+
     <script>
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
@@ -60,6 +70,7 @@
         const closeButton = document.getElementById('close-button');
         const beepTimesInput = document.getElementById('beep-times');
         const timerDurationInput = document.getElementById('timer-duration');
+        const resetTimer = document.getElementById('reset-timer');
         const beep = new Audio('assets/blip-131856.mp3');
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timerDuration = 60;
@@ -159,14 +170,18 @@
                     if (timeLeft <= 0) {
                         timeLeft = timerDuration * 10;
                     }
+                    resetTimer.style.display = elapsedTime > 0 ? 'flex' : 'none';
                 }, 100);
             } else {
                 clearInterval(countdown);
                 running = false;
             }
         });
+
         document.addEventListener('DOMContentLoaded', function () {
             const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
+            const resetTimerButton = document.getElementById('reset-timer-button');
+            
             const body = document.body;
             const savedTheme = getCookie('theme');
             if (savedTheme) {
@@ -185,7 +200,21 @@
                     setCookie('theme', 'dark-mode', 365);
                 }
             });
+
+            resetTimerButton.addEventListener('click', () => {
+                clearInterval(countdown);
+                running = false;
+                timeLeft = timerDuration * 10;
+                elapsedTime = 0;
+                progressText.innerText = timerDuration;
+                progressPath.style.strokeDashoffset = 1165;
+                elapsedTimeDisplay.innerText = formatTime(0);
+                resetTimer.style.display = 'none';
+            });
+
+            resetTimer.style.display = 'none';
         });
+
         loadSettings();
     </script>
 </body>
