@@ -10,6 +10,16 @@
     <link rel="stylesheet" href="assets/style.css">
 </head>
 
+<style>
+    @font-face {
+    font-display: swap;
+    font-family: "Nunito-Digits";
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/Nunito-Regular-Subset.woff2") format("woff2");
+}
+</style>
+
 <body>
     <div class="theme-toggle">
         <input type="checkbox" id="theme-toggle-checkbox">
@@ -72,7 +82,7 @@
         const timerDurationInput = document.getElementById('timer-duration');
         const resetTimer = document.getElementById('reset-timer');
         const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
-        const beep = new Audio('assets/blip-131856.mp3');
+        const beep = new Audio("assets/blip-131856.mp3");
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
         let timerDuration = 60;
         const timerDevider = 10;

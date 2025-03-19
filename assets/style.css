@@ -1,11 +1,3 @@
-@font-face {
-    font-display: swap;
-    font-family: "Nunito-Digits";
-    font-style: normal;
-    font-weight: 400;
-    src: url("Nunito-Regular-Subset.woff2") format("woff2");
-}
-
 *:focus,
 *:focus-visible {
     outline: none !important
