@@ -2,14 +2,14 @@
 <html lang="de">
     <!--
     * @author Daniel Groß
-    * @copyright // Last modified: 2025/03/19 18:34:24
+    * @copyright // Last modified: 2025/03/19 21:10:27
     -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>tima</title>
     <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-    <link rel="manifest" href="assets/website.manifest">
+    <link rel="manifest" href="assets/website.manifest" crossorigin="use-credentials">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 
@@ -25,7 +25,7 @@
 
 <body>
     <div class="theme-toggle">
-        <input type="checkbox" id="theme-toggle-checkbox">
+        <input type="checkbox" id="theme-toggle-checkbox" aria-label="Theme wechseln">
         <label for="theme-toggle-checkbox" class="theme-toggle-label">
             <svg class="theme-toggle-icon" viewBox="0 0 24 24" width="24" height="24" stroke-linecap="round">
                 <path class="moon" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z" />
@@ -43,19 +43,19 @@
             </svg>
         </label>
     </div>
-    <div class="progress-circle" id="progress-circle">
+    <div class="progress-circle" id="progress-circle" role="progressbar">
         <svg viewBox="0 0 400 400" stroke-width="13" fill="none" stroke-linecap="round">
-            <circle class="outercircle" id="progress-outercircle"  cx="200" cy="200" r="185.5"  transform="rotate(3 200 200)"  />
-            <circle class="innercircle" id="progress-innercircle"  cx="200" cy="200" r="185.5"  transform="rotate(-91 200 200)"  />
+            <circle class="outercircle" id="progress-outercircle" cx="200" cy="200" r="185.5" transform="rotate(3 200 200)" />
+            <circle class="innercircle" id="progress-innercircle" cx="200" cy="200" r="185.5" transform="rotate(-91 200 200)" />
         </svg>
         <div class="text" id="progress-text">60</div>
     </div>
 
     <div class="elapsed-time" id="elapsed-time">00:00</div>
-    <div class="settings-button" id="settings-button">…</div>
-    <div class="settings-dialog" id="settings-dialog">
-        <span class="close-button" id="close-button">&times;</span>
-        <p>Einstellungen</p>
+    <div class="settings-button" id="settings-button" role="button" aria-label="Einstellungen öffnen">…</div>
+    <div class="settings-dialog" id="settings-dialog" role="dialog" aria-labelledby="settings-dialog-title">
+        <span class="close-button" id="close-button" role="button" aria-label="Einstellungen schließen">&times;</span>
+        <p id="settings-dialog-title">Einstellungen</p>
         <label for="beep-times">Beep Zeiten (Sekunden, durch Kommas getrennt):</label>
         <input type="text" id="beep-times" value="45,30,15,3,2,1,0">
         <label for="timer-duration">Dauer des Countdown-Timers (Sekunden):</label>
@@ -63,16 +63,17 @@
     </div>
 
     <div class="reset-timer" id="reset-timer">
-        <div class="reset-timer-button" id="reset-timer-button">
-            <svg class="reset-timer-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" >
-                <polyline points="4.2,4.6 4.2,8.6 8.2,8.6 "/>
-                <path d="M11.6,7.8v4.9h4.5"/>
-                <path d="M5,8c1.4-2.4,4-4,6.9-4	c4.4,0,8,3.6,8,8s-3.6,8-8,8s-8-3.6-8-8"/>
-            </svg>                
+        <div class="reset-timer-button" id="reset-timer-button" role="button" aria-label="Timer zurücksetzen">
+            <svg class="reset-timer-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4.2,4.6 4.2,8.6 8.2,8.6" />
+                <path d="M11.6,7.8v4.9h4.5" />
+                <path d="M5,8c1.4-2.4,4-4,6.9-4	c4.4,0,8,3.6,8,8s-3.6,8-8,8s-8-3.6-8-8" />
+            </svg>
         </div>
     </div>
 
     <script>
+        (function () {
         const progresscircle = document.getElementById('progress-circle');
         const progressText = document.getElementById('progress-text');
         const progressPath = document.getElementById('progress-innercircle');
@@ -87,7 +88,8 @@
         const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
         const beep = new Audio("assets/blip-131856.mp3");
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
-        let timerDuration = 60;
+        const timerDurationPreset = 60;
+        let timerDuration = timerDurationPreset;
         const timerDevider = 10;
         let timeLeft = timerDuration * timerDevider;
         let elapsedTime = 0;
@@ -127,10 +129,19 @@
             }
         }
 
+        function sanitizebeepTimesInput(input) {
+            return input
+                .split(',')
+                .map(n => Number(n.trim()))
+                .filter(n => !isNaN(n) && n <= timerDuration)
+                .sort((a, b) => b - a);
+        }
+
         function loadSettings() {
             const timerDurationCookie = getCookie("timerDuration");
             if (timerDurationCookie) {
-                timerDuration = Number(timerDurationCookie);
+                const newValue = Number(timerDurationCookie);
+                timerDuration = (newValue <= 0 || isNaN(newValue)) ? timerDurationPreset : newValue;
                 timerDurationInput.value = timerDuration;
                 timeLeft = timerDuration * timerDevider;
                 progressText.innerText = timerDuration;
@@ -142,19 +153,22 @@
             }
             const beepTimesCookie = getCookie("beepTimes");
             if (beepTimesCookie) {
-                beepTimes = beepTimesCookie.split(',').map(Number);
-                beepTimesInput.value = beepTimesCookie;
+                beepTimes = sanitizebeepTimesInput(beepTimesCookie);
+                beepTimesInput.value = beepTimes.join(',');
             }
-            beepGaps(beepTimes);
+            calculateBeepGaps();
         }
 
-        function beepGaps(beepTimes) {
-            beepTimes = [timerDuration, ...beepTimes];
+        function calculateBeepGaps() {
+            const beepTimesTemp = [timerDuration, ...beepTimes, 0];
 
-            const dashArray = beepTimes
+            const dashArray = beepTimesTemp
                 .map((time, i, arr) => i < arr.length - 1 ? time - arr[i + 1] : null)
                 .filter(interval => interval > 0)
-                .map(interval => `${(interval / timerDuration) * totalLength - gap} ${gap}`)
+                .map((interval, i, arr) => {
+                    const calculatedGap = i === arr.length - 1 ? 0 : gap;
+                    return `${(interval / timerDuration) * totalLength - calculatedGap} ${calculatedGap}`;
+                })
                 .join(' ');
 
             progressOuterPath.style.strokeDasharray = dashArray;
@@ -175,16 +189,20 @@
         });
 
         beepTimesInput.addEventListener('change', () => {
-            beepTimes = beepTimesInput.value.split(',').map(Number);
-            beepGaps(beepTimes);
-            setCookie("beepTimes", beepTimesInput.value, 365);
+            beepTimes = sanitizebeepTimesInput(beepTimesInput.value);
+            calculateBeepGaps();
+            setCookie("beepTimes", beepTimes.join(','), 365);
+            beepTimesInput.value = beepTimes.join(',');
         });
 
         timerDurationInput.addEventListener('change', () => {
-            timerDuration = Number(timerDurationInput.value);
+            const newValue = Number(timerDurationInput.value);
+            timerDuration = (newValue <= 0 || isNaN(newValue)) ? timerDurationPreset : newValue;
             setCookie("timerDuration", timerDuration, 365);
             timeLeft = timerDuration * timerDevider;
             progressText.innerText = timerDuration;
+            timerDurationInput.value = timerDuration;
+            calculateBeepGaps();
         });
 
         progresscircle.addEventListener('click', () => {
@@ -193,11 +211,11 @@
                 countdown = setInterval(() => {
                     timeLeft--;
                     elapsedTime++;
-                    timeLeft_in_seconds = Math.floor(timeLeft / timerDevider);
+                    const timeLeft_in_seconds = Math.floor(timeLeft / timerDevider);
                     progressPath.style.strokeDashoffset = (timeLeft / (timerDuration * timerDevider)) * totalLength;
                     progressPath.style.transition = timeLeft > (timerDuration * timerDevider - 2) ? 'none' : 'stroke-dashoffset 0.1s linear';
-                    if (timeLeft % timerDevider == 0) {
-                        progressText.innerText = timeLeft == 0 ? timerDuration : timeLeft_in_seconds;
+                    if (timeLeft % timerDevider === 0) {
+                        progressText.innerText = timeLeft === 0 ? timerDuration : timeLeft_in_seconds;
                         elapsedTimeDisplay.innerText = formatTime(Math.floor(elapsedTime / timerDevider));
                         if (beepTimes.includes(timeLeft_in_seconds)) {
                             beep.play();
@@ -215,8 +233,6 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const resetTimerButton = document.getElementById('reset-timer-button');
-            
             const body = document.body;
             const savedTheme = getCookie('theme');
             if (savedTheme) {
@@ -225,17 +241,12 @@
             }
 
             toggleCheckbox.addEventListener('change', function () {
-                if (this.checked) {
-                    body.classList.remove('dark-mode');
-                    body.classList.add('light-mode');
-                    setCookie('theme', 'light-mode', 365);
-                } else {
-                    body.classList.remove('light-mode');
-                    body.classList.add('dark-mode');
-                    setCookie('theme', 'dark-mode', 365);
-                }
+                body.classList.toggle('light-mode', this.checked);
+                body.classList.toggle('dark-mode', !this.checked);
+                setCookie('theme', this.checked ? 'light-mode' : 'dark-mode', 365);
             });
 
+            const resetTimerButton = document.getElementById('reset-timer-button');
             resetTimerButton.addEventListener('click', () => {
                 clearInterval(countdown);
                 running = false;
@@ -249,6 +260,7 @@
         });
 
         loadSettings();
+    })();
     </script>
 </body>
 
