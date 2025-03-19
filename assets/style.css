@@ -114,6 +114,7 @@ body.dark-mode {
     justify-content: center;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    display: none;
 }
 
 .reset-timer-button {
