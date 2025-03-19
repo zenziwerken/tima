@@ -39,6 +39,7 @@ body {
     transition: background-color 0.3s, color 0.3s;
     background-color: #000;
     color: #fff;
+    user-select: none; /* Verhindert die Textauswahl */
 }
 
 body.light-mode {
@@ -120,6 +121,7 @@ body.dark-mode {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .reset-timer-button {
