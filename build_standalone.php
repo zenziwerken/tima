@@ -1,8 +1,4 @@
 <?php
-/*
-* @author Daniel Groß
-* Last modified: 2025/03/20 17:39:41
-*/
 
 // Lese den Inhalt der index.html Datei
 $html = file_get_contents('index.html');
@@ -46,26 +42,23 @@ file_put_contents('tima_standalone.html', $html);
  */
 function replaceAssetReferences($content, $filetypes)
 {
-    preg_match_all('%"assets/(.+?)\.(.+?)"%sm', $content, $matches, PREG_SET_ORDER);
+    preg_match_all('%("assets/(.+?)\.(.+?)")|url\("(.+?)\.(.+?)"\)%sm', $content, $matches, PREG_SET_ORDER);
+    
     foreach ($matches as $match) {
-        $filePath = __DIR__ . '/assets/' . $match[1] . '.' . $match[2];
-        if (!file_exists($filePath)) {
-            continue;
-        }
-        $fileContent = file_get_contents($filePath);
-        $base64Data = '"data:' . ($filetypes[$match[2]] ?? 'application/octet-stream') . ';base64,' . base64_encode($fileContent) . '"';
-        $content = str_replace($match[0], $base64Data, $content);
-    }
+        $filename = !empty($match[2]) ? $match[2] : $match[4];
+        $extension = !empty($match[3]) ? $match[3] : $match[5];
 
-    // Behandlung von URL-Werten innerhalb von CSS-Dateien
-    preg_match_all('%url\("(.+?)\.(.+?)"\)%sm', $content, $matches, PREG_SET_ORDER);
-    foreach ($matches as $match) {
-        $filePath = __DIR__ . '/assets/' . $match[1] . '.' . $match[2];
+        $filePath = __DIR__ . '\assets\\' . $filename . '.' . $extension;
+
         if (!file_exists($filePath)) {
             continue;
         }
-        $fileContent = file_get_contents($filePath);
-        $base64Data = 'url("data:' . ($filetypes[$match[2]] ?? 'application/octet-stream') . ';base64,' . base64_encode($fileContent) . '")';
+        
+        $datastream = ($filetypes[$extension] ?? 'application/octet-stream') . ';base64,' . base64_encode(file_get_contents($filePath));
+        $base64Data = ($match[1]) 
+            ? '"data:' . $datastream. '"'
+            : 'url("data:' . $datastream . '")';
+        
         $content = str_replace($match[0], $base64Data, $content);
     }
     return $content;
