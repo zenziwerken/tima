@@ -147,7 +147,7 @@ body.dark-mode {
     background-color: #000;
     color: #fff;
     padding: 20px;
-    font-size: 2rem;
+    font-size: 1.8rem;
     border-radius: 1rem;
     border: 2px solid #666;
     text-size-adjust: none;
@@ -173,7 +173,7 @@ input#timer-duration {
     background-color: #000;
     border: 2px solid #999;
     border-radius: 1rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     max-width: 76vw;
     width: 48vh;
     letter-spacing: 0.1vh;

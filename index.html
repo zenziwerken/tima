@@ -2,7 +2,7 @@
 <html lang="de">
     <!--
     * @author Daniel Groß
-    * @copyright // Last modified: 2025/03/19 21:10:27
+    * @copyright // Last modified: 2025/03/20 10:02:32
     -->
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,7 @@
     <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
     <link rel="manifest" href="assets/website.manifest" crossorigin="use-credentials">
     <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/beep.js"><!-- github.com/luciferous/beepjs/blob/master/beep.js --></script>
 </head>
 
 <style>
@@ -50,6 +51,16 @@
         </svg>
         <div class="text" id="progress-text">60</div>
     </div>
+    
+    <div class="reset-timer" id="reset-timer">
+        <div class="reset-timer-button" id="reset-timer-button" role="button" aria-label="Timer zurücksetzen">
+            <svg class="reset-timer-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4.2,4.6 4.2,8.6 8.2,8.6" />
+                <path d="M11.6,7.8v4.9h4.5" />
+                <path d="M5,8c1.4-2.4,4-4,6.9-4	c4.4,0,8,3.6,8,8s-3.6,8-8,8s-8-3.6-8-8" />
+            </svg>
+        </div>
+    </div>
 
     <div class="elapsed-time" id="elapsed-time">00:00</div>
     <div class="settings-button" id="settings-button" role="button" aria-label="Einstellungen öffnen">…</div>
@@ -60,16 +71,6 @@
         <input type="text" id="beep-times" value="45,30,15,3,2,1,0">
         <label for="timer-duration">Dauer des Countdown-Timers (Sekunden):</label>
         <input type="number" id="timer-duration" value="60">
-    </div>
-
-    <div class="reset-timer" id="reset-timer">
-        <div class="reset-timer-button" id="reset-timer-button" role="button" aria-label="Timer zurücksetzen">
-            <svg class="reset-timer-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="4.2,4.6 4.2,8.6 8.2,8.6" />
-                <path d="M11.6,7.8v4.9h4.5" />
-                <path d="M5,8c1.4-2.4,4-4,6.9-4	c4.4,0,8,3.6,8,8s-3.6,8-8,8s-8-3.6-8-8" />
-            </svg>
-        </div>
     </div>
 
     <script>
@@ -86,7 +87,22 @@
         const timerDurationInput = document.getElementById('timer-duration');
         const resetTimer = document.getElementById('reset-timer');
         const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
-        const beep = new Audio("assets/blip-131856.mp3");
+        let beep;
+
+        function createFallbackBeep() {
+            const beepsound = new Beep(22050).encode(650, 0.06, [Beep.utils.amplify(8000)]);
+            return new Audio('data:audio/x-wav;base64,' + btoa(beepsound));
+        }
+
+        try {
+            beep = new Audio("assets/blip-131856.mp3");
+            beep.addEventListener('error', () => {
+                beep = createFallbackBeep();
+            });
+        } catch (e) {
+            beep = createFallbackBeep();
+        }
+                
         let beepTimes = [45, 30, 15, 3, 2, 1, 0];
         const timerDurationPreset = 60;
         let timerDuration = timerDurationPreset;
