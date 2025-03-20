@@ -6,8 +6,7 @@ Additionally, 'tima' offers customization options, allowing users to modify the 
 > [!TIP]
 > You can use 'tima' directly in your browser by accessing the [online page](https://zenziwerken.github.io/tima/), or you can install it as a web app for quick and easy access. If you prefer offline use, simply download the HTML file and open it in your browser—no internet connection required. This flexibility ensures you can use 'tima' anytime, anywhere!
 
-Blipsound from [pixabay](https://pixabay.com/de/sound-effects/blip-131856/) (User u_f1ee7vf7na).
-
+Blipsound from [pixabay](https://pixabay.com/de/sound-effects/blip-131856/) (User u_f1ee7vf7na).  
 Alternative beep using [beep.js](https://github.com/luciferous/beepjs/blob/master/beep.js) (by Neuman Vong)
 
 
