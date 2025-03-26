@@ -39,11 +39,8 @@ var utils = {
         return Math.floor(a * b / utils.gcd(a, b));
     },
     compose: function(fns) {
-        return function(a) {
-            for (var i = 0; i < fns.length; i++) {
-                a = fns[i](a);
-            }
-            return a;
+        return function(x) {
+            return fns.reduce((acc, fn) => fn(acc), x);
         };
     },
     map: function(fn, items) {
@@ -77,14 +74,7 @@ var utils = {
             return fn.apply(ctx, args);
         };
     },
-    foldl: function(fn, items) {
-        if (items.length == 1) return items[0];
-        var result = fn(items[0], items[1]);
-        for (var i = 2; i < items.length; i++) {
-            result = fn(result, items[i]);
-        }
-        return result;
-    },
+    foldl: (fn, items) => items.reduce(fn),
     mulmod: function(a, b, c) {
         return (a * b) % c;
     },
@@ -99,13 +89,15 @@ var utils = {
 function Beep(samplerate) {
     if (!(this instanceof Beep)) return new Beep(samplerate);
     if (typeof samplerate != "number" || samplerate < 1) return null;
+    
     this.channels = 1;
     this.bitdepth = 16;
     this.samplerate = samplerate;
-    this.sine = [];
-    var factor = (2 * Math.PI) / parseFloat(samplerate);
-    for (var n = 0; n < samplerate; n++) {
-        this.sine.push(Math.sin(n * factor));
+    this.sine = new Float32Array(samplerate);
+    
+    const factor = (2 * Math.PI) / samplerate;
+    for (let n = 0; n < samplerate; n++) {
+        this.sine[n] = Math.sin(n * factor);
     }
 }
 Beep.prototype = {
