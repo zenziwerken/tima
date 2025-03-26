@@ -1,6 +1,6 @@
 /*
 * @author Daniel Groß
-* Last modified: 2025/03/20 17:47:35
+* Last modified: 2025/03/26 18:21:06
 */
 @font-face {
     font-display: swap;
@@ -55,7 +55,24 @@ body.dark-mode {
     background-color: #000;
     color: #fff;
 }
+body.light-mode {
+    background: linear-gradient(-30deg, #fcf8f7, #fff7fa, #f6fdff, #f6fefc);
+	background-size: 400% 200%;
+	animation: gradient 10s ease infinite;
+	height: 100vh;
+}
 
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 .theme-toggle {
     position: fixed;
     top: 2rem;
@@ -211,6 +228,7 @@ input#timer-duration {
 .progress-circle svg {
     width: 100%;
     height: 100%;
+    filter: drop-shadow(0 0 3vw rgba(0, 0, 0, 0.1));
 }
 
 .text {
@@ -261,7 +279,7 @@ input#timer-duration {
 }
 
 .light-mode .outercircle {
-    stroke: #ddd;
+    stroke: #fff;
 }
 
 .light-mode .innercircle {
@@ -270,12 +288,13 @@ input#timer-duration {
 
 .light-mode .theme-toggle-label,
 .light-mode .reset-timer {
-    background-color: #f0f0f0;
+    background-color: #fff;
+    filter: drop-shadow(0 0 2vh rgba(0, 0, 0, 0.1));
 }
 
 .light-mode .theme-toggle-label:hover,
 .light-mode .reset-time:hover {
-    background-color: #ddd;
+    filter: drop-shadow(0 0 2vh rgba(0, 0, 0, 0.2));
 }
 
 .light-mode .reset-timer-icon {
@@ -328,5 +347,10 @@ input#timer-duration {
     input#timer-duration {
         display: block;
     }
+
+    .progress-circle svg {
+        filter: drop-shadow(0 0 3vh rgba(0, 0, 0, 0.1));
+    }
+    
 
 }
